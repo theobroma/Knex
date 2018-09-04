@@ -5,7 +5,9 @@ import mongoose from 'mongoose';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import './env';
-import { connect } from './db';
+//import { connect } from './db';
+import * as db from './db/postgres';
+
 import authRoutes from './routes/auth-routes';
 import todosRoutes from './routes/todos-routes';
 //import passportSetup from './config/passport-setup';
@@ -18,7 +20,8 @@ app.set('port', process.env.PORT || 3001);
  * - connect to MongoDB using mongoose
  * - register mongoose Schema
  */
-connect();
+
+//connect();
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -32,8 +35,19 @@ app.use(express.static(path.join(__dirname, 'static')));
 app.use('*', cors({ origin: 'http://localhost:3000' }));
 //set up routes
 // All routes in the end
-app.use('/auth', authRoutes);
-app.use('/todos', todosRoutes);
+// app.use('/auth', authRoutes);
+// app.use('/todos', todosRoutes);
+app.use('/todos', function(req, res) {
+  db.select()
+    .from('todo')
+    .then(function(data) {
+      res.send(data);
+    });
+});
+// app.get('/todos', (req, res) => {
+//   res.send('hello');
+// });
+
 //create home route
 app.get('/', function(req, res) {
   res.render('home');
