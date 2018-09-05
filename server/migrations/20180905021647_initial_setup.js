@@ -2,9 +2,9 @@ exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('todo', function(table) {
       table.increments();
-      table.string('title').notNullable();
+      table.string('text').notNullable();
       table
-        .boolean('is_done')
+        .boolean('completed')
         .notNullable()
         .defaultTo(false);
     })
