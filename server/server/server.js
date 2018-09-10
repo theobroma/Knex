@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import './env';
 //import { connect } from './db';
-import * as db from './db/postgres';
+import db from './db/postgres';
 
 import authRoutes from './routes/auth-routes';
 import todosRoutes from './routes/todos-routes';
@@ -46,6 +46,22 @@ app.get ('/todos', function (req, res) {
 app.post ('/todos', function (req, res) {
   db.insert (req.body).returning ('*').into ('todo').then (function (data) {
     res.send (data);
+  });
+});
+
+app.patch ('/todos/:id', function (req, res) {
+  db ('todo')
+    .where ({id: req.params.id})
+    .update (req.body)
+    .returning ('*')
+    .then (function (data) {
+      res.send (data);
+    });
+});
+
+app.delete ('/todos/:id', function (req, res) {
+  db ('todo').where ({id: req.params.id}).del ().then (function () {
+    res.json ({success: true});
   });
 });
 
