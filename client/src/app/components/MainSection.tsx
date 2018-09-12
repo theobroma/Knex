@@ -10,7 +10,7 @@ import TodoItem from './TodoItem';
 interface MainSectionProps {
   //todoarr: Todo[];
 }
-interface MainSectionState {}
+interface MainSectionState { }
 
 //replace todoarr with state from redux or reverse
 export default class MainSection extends React.Component<any, any> {
